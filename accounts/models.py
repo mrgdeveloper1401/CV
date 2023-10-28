@@ -1,19 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from core.models import CreateModel, UpdateModel
+from core.models import CreateModel
 from django.utils.translation import gettext_lazy as _
 from django_jalali.db import models as jmodels
+from django.utils import timezone
 from .manager import UsersManager
 
 
-class User(AbstractBaseUser, PermissionsMixin, CreateModel, UpdateModel):
+class User(AbstractBaseUser, PermissionsMixin, CreateModel):
     full_name = models.CharField(_('Full name'), max_length=100)
     email = models.EmailField(_('Email'), max_length=100, unique=True)
     mobile_phone = models.CharField(_('Mobile phone'), max_length=11, unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    last_login = jmodels.jDateTimeField(_("last login"), blank=True, null=True)
- 
+    last_login = jmodels.jDateTimeField(_("last login"), default=timezone.now())
+
     objects = UsersManager()
     
     USERNAME_FIELD = 'email'

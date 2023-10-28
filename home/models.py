@@ -1,11 +1,13 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from core.models import CreateModel, UpdateModel
+from core.models import CreateModel
+from django_jalali.db import models as jmodels
+from accounts.models import User
 
 
 
-class NvbarModel(CreateModel, UpdateModel):
+class NvbarModel(CreateModel):
     navbar_name = models.CharField(_('Name'), max_length=20)
 
     class NavbarChoose(models.TextChoices):
@@ -20,24 +22,24 @@ class NvbarModel(CreateModel, UpdateModel):
         verbose_name = _('navbar')
         verbose_name_plural = _('navbars')
         db_table = 'navbar'
-        ordering = ('-navbar_name',)
+        # ordering = ('-navbar_name',)
         
         
-class HeaderConetent(CreateModel, UpdateModel):
-    text = models.CharField(_('text'), max_length=50)
+class HeaderConetent(CreateModel):
+    text = models.CharField(_('tell me about you'), max_length=50)
+    image = models.ImageField(blank=True)
     
     def __str__(self) -> str:
         return self.text
     
     class Meta:
-        verbose_name = _('header_conetent')
-        verbose_name_plural = _('header_conetents')
+        verbose_name = _('header conetent')
+        verbose_name_plural = _('header conetents')
         db_table = 'header_conetent'
         
-        
-class HeaderConetentSciol(CreateModel, UpdateModel):
+class HeaderConetentSciol(CreateModel):
     sciol_name = models.CharField(_('sciol name'), max_length=20)
-    sciol_url = models.URLField(_('sciol url'))    
+    sciol_url = models.CharField(_('sciol url'), max_length=255)    
     
     def __str__(self) -> str:
         return self.sciol_name
@@ -48,21 +50,24 @@ class HeaderConetentSciol(CreateModel, UpdateModel):
         db_table = 'sciol'
         
         
-class AboutMeModels(CreateModel, UpdateModel):
-    image = models.ImageField()
+class AboutMeModels(CreateModel):
+    image = models.ImageField(blank=True)
     full_name = models.CharField(_('full_name'), max_length=50)
     explain = models.TextField(_('explain'), max_length=255)
+    email = models.EmailField(null=True, blank=True)
+    mobile_phone = models.CharField(_('mobile phone'), max_length=11, unique=True, null=True, blank=True)
+    job = models.CharField(_('job'), max_length=50, null=True, blank=True)
     
     def __str__(self) -> str:
         return self.full_name
     
     class Meta:
-        verbose_name = _('about_me')
-        verbose_name_plural = _('abouts_me')
+        verbose_name = _('about me')
+        verbose_name_plural = _('abouts me')
         db_table = 'about_me'
         
         
-class SkillModel(CreateModel, UpdateModel):
+class SkillModel(CreateModel):
     skill_name = models.CharField(_('skill_name'), max_length=50)
     image = models.ImageField(_('image'), blank=True)
     
@@ -70,14 +75,17 @@ class SkillModel(CreateModel, UpdateModel):
         return self.skill_name
     
     class Meta:
-        verbose_name = _('skill_mode')
-        verbose_name_plural = _('skill_modes')
+        verbose_name = _('skill')
+        verbose_name_plural = _('skills')
         db_table = 'skill'
         
         
-class EducationModel(CreateModel, UpdateModel):
-    title_education = models.CharField(_('education'), max_length=100)
-    text = models.CharField(_('text'), max_length=255)
+class EducationModel(CreateModel):
+    title_education = models.CharField(_('education name'), max_length=100)
+    text = models.TextField(_('sayTell me a little bit about it education. '), max_length=255)
+    at_education = jmodels.jDateField(_('at time'))
+    to_education = jmodels.jDateField(_('to time'), blank=True, null=True)
+    busy = models.BooleanField(default=False)
     
     def __str__(self) -> str:
         return self.title_education
@@ -88,38 +96,31 @@ class EducationModel(CreateModel, UpdateModel):
         db_table = 'educations'
         
         
-class ExpreiencModel(CreateModel, UpdateModel):
-    exprense_title = models.CharField(_('exprience'), max_length=50)
-    explain_exprence = models.CharField(_('explain'), max_length=255)
-    at_date_exprence = models.DateField(_('at date'), default=timezone.now)
-    to_date_exprence = models.DateField(_('to date'), default=timezone.now)
+class ExpreiencModel(CreateModel):
+    exprense_title = models.CharField(_('exprience title'), max_length=50)
+    explain_exprence = models.TextField(_('explain to own project'), max_length=300)
+    link_project = models.URLField(_('link to project'), blank=True, null=True)
+    image = models.ImageField(blank=True, null=True)
+    at_date_exprence = jmodels.jDateField(_('at date'), default=timezone.now)
+    to_date_exprence = jmodels.jDateField(_('to date'), default=timezone.now)
     
-    
+    class StatusProject(models.TextChoices):
+        start = 's', _('start'),
+        doing = 'd', _('doing'),
+        complate = 'c', _('complate'),
+    status_project = models.CharField(_('status'),
+                                      max_length=1,
+                                      default=StatusProject.complate,
+                                      choices=StatusProject.choices)
     def __str__(self) -> str:
-        return self.exprence_title
+        return self.exprense_title
     
     class Meta:
         verbose_name = _('exprence')
         verbose_name_plural = _('exprences')
         db_table = 'exprences'
-        
-        
-        
-class AboutMeModel(CreateModel, UpdateModel):
-    full_name = models.CharField(_('full_name'), max_length=100)
-    image = models.ImageField(blank=True)
-    explain_to_me = models.TextField(_('explain to me'))
-    
-    def __str__(self) -> str:
-        return self.full_name
-    
-    class Meta:
-        verbose_name = _('about_me')
-        verbose_name_plural = _('abouts_me')
-        db_table = 'about_mee'
-        
-        
-class ContactUsModel(CreateModel, UpdateModel):
+            
+class ContactUsModel(CreateModel):
     full_name = models.CharField(_('full_name'), max_length=100)
     email = models.CharField(_('email'), max_length=100, unique=True)
     mobile_phone = models.CharField(_('mobile_phone'), max_length=11, unique=True, blank=True)
@@ -130,7 +131,7 @@ class ContactUsModel(CreateModel, UpdateModel):
     
     class Meta:
         verbose_name = _('content us')
-        verbose_name_plural = _('contents_us')
+        verbose_name_plural = _('contents us')
         db_table = 'contents'
         
 
@@ -144,6 +145,6 @@ class ContentInfoModel(models.Model):
         return self.full_name
     
     class Meta:
-        verbose_name = _('contact_info')
-        verbose_name_plural = _('contacts_info')
+        verbose_name = _('contact info')
+        verbose_name_plural = _('contacts info')
         db_table = 'contact_info'
