@@ -89,7 +89,7 @@ class EducationModel(CreateModel, UpdateModel):
         
         
 class ExpreiencModel(CreateModel, UpdateModel):
-    exprence_title = models.CharField(_('exprience'), max_length=50)
+    exprense_title = models.CharField(_('exprience'), max_length=50)
     explain_exprence = models.CharField(_('explain'), max_length=255)
     at_date_exprence = models.DateField(_('at date'), default=timezone.now)
     to_date_exprence = models.DateField(_('to date'), default=timezone.now)
@@ -101,7 +101,7 @@ class ExpreiencModel(CreateModel, UpdateModel):
     class Meta:
         verbose_name = _('exprence')
         verbose_name_plural = _('exprences')
-        db_tabel = 'exprences'
+        db_table = 'exprences'
         
         
         
@@ -116,7 +116,7 @@ class AboutMeModel(CreateModel, UpdateModel):
     class Meta:
         verbose_name = _('about_me')
         verbose_name_plural = _('abouts_me')
-        db_table = 'about_me'
+        db_table = 'about_mee'
         
         
 class ContactUsModel(CreateModel, UpdateModel):

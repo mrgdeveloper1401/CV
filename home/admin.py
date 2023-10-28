@@ -40,19 +40,19 @@ class EducationModelAdmin(admin.ModelAdmin):
     
 @admin.register(ExpreiencModel)
 class ExpreiencModelAdmin(admin.ModelAdmin):
-    list_display = ('title_expreienc', 'text', 'idtitle_education', 'to_date_exprence')
+    list_display = ('exprense_title', 'at_date_exprence', 'to_date_exprence', 'id')
     
 
 @admin.register(AboutMeModel)
 class AboutMeModelAdmin(admin.ModelAdmin):
-    list_display = ('title_expreienc', 'text', 'id')
+    list_display = ('full_name', 'explain_to_me', 'id')
     
     
 @admin.register(ContactUsModel)
 class ContactUsModelAdmin(admin.ModelAdmin):
-    list_display = ('fullname', 'email', 'moile_phone', 'id')
+    list_display = ('full_name', 'email', 'mobile_phone', 'id')
     
     
 @admin.register(ContentInfoModel)
 class ContentInfoModelAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'email', 'moile_phone', 'id')
+    list_display = ('full_name', 'email', 'mobile_phone', 'id')
