@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from core.models import CreateModel, UpdateModel
 from django.utils.translation import gettext_lazy as _
+from django_jalali.db import models as jmodels
 from .manager import UsersManager
 
 
@@ -11,7 +12,8 @@ class User(AbstractBaseUser, PermissionsMixin, CreateModel, UpdateModel):
     mobile_phone = models.CharField(_('Mobile phone'), max_length=11, unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    
+    last_login = jmodels.jDateTimeField(_("last login"), blank=True, null=True)
+ 
     objects = UsersManager()
     
     USERNAME_FIELD = 'email'
