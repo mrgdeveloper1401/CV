@@ -40,12 +40,13 @@ class UserLoginView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(
+            user = authenticate(request,
                 email = cd['email'],
                 password = cd['password']
             )
             if user is not None:
                 login(request, user)
+                messages.success(request, 'login successful', 'success')
                 return redirect('home:home')
             messages.error(request, 'Invalid username or password', 'warning')
         return render(request, self.templated_name, {'form': form})
@@ -55,3 +56,4 @@ class UserLogoutView(View):
     def get(self, request):
             logout(request)
             messages.success(request, 'User logged out', 'success')
+            return redirect('accounts:login')

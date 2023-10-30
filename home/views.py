@@ -10,6 +10,14 @@ from .form import ContactUsForm
 class HomeView(View):
     templated_name = 'home/home.html'
     form_class = ContactUsForm
+    
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated == request.user:
+            messages.error(request, 'You are not authorized to', 'danger')
+        return super().dispatch(request, *args, **kwargs)
+
+    
+    
     def get(self, request):
         # navbar = NvbarModel.objects.published()
         header_content = HeaderConetent.objects.all()

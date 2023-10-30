@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import gettext_lazy as _
 from .models import User
+from django.contrib.auth.forms import AuthenticationForm
 
 
 class UserCreationForm(forms.ModelForm):
@@ -66,9 +67,9 @@ class UserSignupForm(forms.ModelForm):
 class UserLoginForm(forms.Form):
     email = forms.CharField(
         label='email',
-        widget=forms.EmailInput(attrs={'form': 'form-control'})
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'})
     )
     password = forms.CharField(
         label='password',
-        widget=forms.PasswordInput(attrs={'form': 'form-control'})
+        widget=forms.PasswordInput(attrs={'autocomplete': 'password'})
     )
