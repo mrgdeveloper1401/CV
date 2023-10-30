@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -57,3 +57,24 @@ class UserLogoutView(View):
             logout(request)
             messages.success(request, 'User logged out', 'success')
             return redirect('accounts:login')
+        
+        
+class UserProfileView(View):
+    
+    def dispatch(self, request, *args, **kwargs):
+        user = get_object_or_404(User, pk=kwargs['user_id'])
+        if request.user.id != user.id:
+            messages.error(request, 'invalid', 'danger')
+            return redirect('accounts:profile', request.user.id)
+        return super().dispatch(request, *args, **kwargs)
+        
+        
+    templated_name = 'accounts/profile.html'
+    def get(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)
+        return render(request, self.templated_name, {'user': user})
+    
+    def post(self, request):
+        pass
+    
+    
