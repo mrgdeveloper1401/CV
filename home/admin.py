@@ -1,19 +1,19 @@
 from django.contrib import admin
-from .models import NvbarModel, HeaderConetent, HeaderConetentSciol, AboutMeModels, SkillModel
+from .models import HeaderConetent, HeaderConetentSciol, AboutMeModels, SkillModel
 from .models import EducationModel, ExpreiencModel, ContactUsModel, MobileCode, ExprienceProject
 import django_jalali.admin as jadmin
 from django_jalali.admin.filters import JDateFieldListFilter
 
 
 
-@admin.register(NvbarModel)
-class NvbarModelAdmin(admin.ModelAdmin):
-    list_display = ('navbar_name', 'navbar_status', 'id')
-    list_editable = ('navbar_status', )
-    list_filter = (
-        ('created_at', JDateFieldListFilter),
-    )
-    search_fields = ('navbar_name',)
+# @admin.register(NvbarModel)
+# class NvbarModelAdmin(admin.ModelAdmin):
+#     list_display = ('navbar_name', 'navbar_status', 'id')
+#     list_editable = ('navbar_status', )
+#     list_filter = (
+#         ('created_at', JDateFieldListFilter),
+#     )
+#     search_fields = ('navbar_name',)
     
     
 @admin.register(HeaderConetent)

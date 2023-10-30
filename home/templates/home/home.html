@@ -6,7 +6,7 @@
 
 {% block content %}
     {% comment %} heder site {% endcomment %}
-    {% for nav in navbar %}
+    {% comment %} {% for nav in navbar %}
         <nav class='navbar'>
             <ul class='navbar-nav navbar-collapse'>
                 <li class='nav-item'>
@@ -16,7 +16,8 @@
                 </li>
             </ul>
         </nav>
-    {% endfor %}
+    {% endfor %} {% endcomment %}
+    
 {% comment %} body site {% endcomment %}
     {% for hc in hcontent %}
         <p>{{ hc }}</p>

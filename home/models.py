@@ -4,28 +4,28 @@ from django.utils import timezone
 from core.models import CreateModel
 from django_jalali.db import models as jmodels
 from accounts.models import User
-from .manager import NavPublished
+# from .manager import NavPublished
 
 
 # navbar
-class NvbarModel(CreateModel):
-    navbar_name = models.CharField(_('Name'), max_length=20)
+# class NvbarModel(CreateModel):
+#     navbar_name = models.CharField(_('Name'), max_length=20)
 
-    class NavbarChoose(models.TextChoices):
-        publish = 'pb', _('Publish'),
-        reject = 'rj', _('Reject'),
-    navbar_status = models.CharField(_('Status'), max_length=2, choices=NavbarChoose.choices,
-                                     default=NavbarChoose.publish)
-    objects = NavPublished()
+#     class NavbarChoose(models.TextChoices):
+#         publish = 'pb', _('Publish'),
+#         reject = 'rj', _('Reject'),
+#     navbar_status = models.CharField(_('Status'), max_length=2, choices=NavbarChoose.choices,
+#                                      default=NavbarChoose.publish)
+#     objects = NavPublished()
     
-    def __str__(self) -> str:
-        return self.navbar_name
+#     def __str__(self) -> str:
+#         return self.navbar_name
     
-    class Meta:
-        verbose_name = _('navbar')
-        verbose_name_plural = _('navbars')
-        db_table = 'navbar'
-        # ordering = ('-navbar_name',)
+#     class Meta:
+#         verbose_name = _('navbar')
+#         verbose_name_plural = _('navbars')
+#         db_table = 'navbar'
+#         # ordering = ('-navbar_name',)
     
 class HeaderConetent(CreateModel):
     text = models.CharField(_('tell me about you'), max_length=50)

@@ -53,3 +53,22 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
+        
+
+
+class UserSignupForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email', 'mobile_phone', 'full_name', 'password')
+        
+    
+    
+class UserLoginForm(forms.Form):
+    email = forms.CharField(
+        label='email',
+        widget=forms.EmailInput(attrs={'form': 'form-control'})
+    )
+    password = forms.CharField(
+        label='password',
+        widget=forms.PasswordInput(attrs={'form': 'form-control'})
+    )
