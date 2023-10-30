@@ -1,3 +1,5 @@
+from typing import Any
+from django import http
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 from django.contrib import messages
@@ -60,8 +62,13 @@ class UserLogoutView(View):
         
         
 class UserProfileView(View):
+    
+    def setup(self, request: http.HttpRequest, *args: Any, **kwargs: Any):
+        self.user = get_object_or_404(User, pk=kwargs['user_id'])
+        return super().setup(request, *args, **kwargs)
+    
     def dispatch(self, request, *args, **kwargs):
-        user = get_object_or_404(User, pk=kwargs['user_id'])
+        user = self.user
         if request.user.id != user.id:
             messages.error(request, 'invalid', 'danger')
             return redirect('accounts:profile', request.user.id)
@@ -70,10 +77,5 @@ class UserProfileView(View):
         
     templated_name = 'accounts/profile.html'
     def get(self, request, user_id):
-        user = get_object_or_404(User, pk=user_id)
+        user = self.user
         return render(request, self.templated_name, {'user': user})
-    
-    def post(self, request):
-        pass
-    
-    

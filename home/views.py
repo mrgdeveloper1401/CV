@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from django.contrib import messages
 from .models import SciolModel, AboutMeModels, SkillModel, EducationModel, ExpreienceWorkModel, ProjectModel
-from .form import ContactUsForm
+from .form import ContactUsForm, AboutMeForm, SciolForm, SkillForm, EducationForm, ExprienceWorkForm, ProjectForm
 
 
 class HomeView(View):
@@ -39,3 +39,69 @@ class HomeView(View):
             
         }
         return render(request, self.templated_name, context)
+    
+    
+class AboutMeView(View):
+    templated_name = 'home/about_me.html'
+    form_class = AboutMeForm
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.templated_name, {'form': form})
+    
+    def post(self, request, *args, **kwargs):
+        pass
+    
+
+class SciolView(View):
+    templated_name = 'home/sciol.html'
+    form_class = SciolForm
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.templated_name, {'form': form})
+    
+    def post(self, request, *args, **kwargs):
+        pass
+    
+    
+class SkillView(View):
+    templated_name = 'home/skill.html'
+    form_class = SkillForm
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.templated_name, {'form': form})
+    
+    def post(self, request, *args, **kwargs):
+        pass
+    
+
+class EducationView(View):
+    templated_name = 'home/education.html'
+    form_class = EducationForm
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.templated_name, {'form': form})
+    
+    def post(self, request, *args, **kwargs):
+        pass
+    
+    
+class ExprienceWorkView(View):
+    templated_name = 'home/exprience_work.html'
+    form_class = ExprienceWorkForm
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.templated_name, {'form': form})
+    
+    def post(self, request, *args, **kwargs):
+        pass
+    
+
+class ProjectView(View):
+    templated_name = 'home/project.html'
+    form_class = ProjectForm
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.templated_name, {'form': form})
+    
+    def post(self, request, *args, **kwargs):
+        pass

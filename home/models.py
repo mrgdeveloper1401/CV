@@ -19,6 +19,7 @@ class SciolModel(CreateModel):
         verbose_name_plural = _('header conetents sciol')
         db_table = 'sciol'
         
+        
 class AboutMeModels(CreateModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='about')
     image = models.ImageField(blank=True, help_text='Post a picture of yourself')
@@ -96,6 +97,7 @@ class ProjectModel(CreateModel):
     project_url = models.URLField(_('project url'))
     image = models.ImageField(blank=True, null=True)
     
+    
     class StatusProject(models.TextChoices):
         start = 's', _('start'),
         doing = 'd', _('doing'),
@@ -111,6 +113,7 @@ class ProjectModel(CreateModel):
         verbose_name = _('project')
         verbose_name_plural = _('projects')
         db_table = 'projects'
+            
             
 class ContactUsModel(CreateModel):
     full_name = models.CharField(_('full_name'), max_length=100)
