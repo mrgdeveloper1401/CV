@@ -4,45 +4,13 @@ from django.utils import timezone
 from core.models import CreateModel
 from django_jalali.db import models as jmodels
 from accounts.models import User
-# from .manager import NavPublished
 
 
-# navbar
-# class NvbarModel(CreateModel):
-#     navbar_name = models.CharField(_('Name'), max_length=20)
-
-#     class NavbarChoose(models.TextChoices):
-#         publish = 'pb', _('Publish'),
-#         reject = 'rj', _('Reject'),
-#     navbar_status = models.CharField(_('Status'), max_length=2, choices=NavbarChoose.choices,
-#                                      default=NavbarChoose.publish)
-#     objects = NavPublished()
-    
-#     def __str__(self) -> str:
-#         return self.navbar_name
-    
-#     class Meta:
-#         verbose_name = _('navbar')
-#         verbose_name_plural = _('navbars')
-#         db_table = 'navbar'
-#         # ordering = ('-navbar_name',)
-    
-class HeaderConetent(CreateModel):
-    text = models.CharField(_('tell me about you'), max_length=50)
-    image = models.ImageField(blank=True)
-    
-    def __str__(self) -> str:
-        return self.text
-    
-    class Meta:
-        verbose_name = _('header conetent')
-        verbose_name_plural = _('header conetents')
-        db_table = 'header_conetent'
-        
-class HeaderConetentSciol(CreateModel):
+class SciolModel(CreateModel):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='sciol')
     sciol_name = models.CharField(_('sciol name'), max_length=20)
-    sciol_url = models.CharField(_('sciol url'), max_length=255)    
-    
+    sciol_url = models.CharField(_('sciol url'), max_length=255)
+     
     def __str__(self) -> str:
         return self.sciol_name
     
@@ -51,25 +19,13 @@ class HeaderConetentSciol(CreateModel):
         verbose_name_plural = _('header conetents sciol')
         db_table = 'sciol'
         
-class MobileCode(models.Model):
-    mobile_code = models.CharField(_('mobile code'), max_length=5)
-    
-    def __str__(self) -> str:
-        return self.mobile_code
-    
-    class Meta:
-        db_tablespace = 'mobile_code'
-        verbose_name = _('mobile code')
-        verbose_name_plural = _('mobile code')       
-
 class AboutMeModels(CreateModel):
-    image = models.ImageField(blank=True)
-    full_name = models.CharField(_('full_name'), max_length=50)
-    explain = models.TextField(_('explain'), max_length=255)
-    email = models.EmailField(null=True, blank=True)
-    mobile_phone = models.CharField(_('mobile phone'), max_length=11, unique=True, null=True, blank=True)
-    mobile_code = models.ForeignKey(MobileCode, on_delete=models.PROTECT, verbose_name='code')
-    job = models.CharField(_('job'), max_length=50, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='about')
+    image = models.ImageField(blank=True, help_text='Post a picture of yourself')
+    explain = models.TextField(_('explain'), max_length=500,
+        help_text='Write something about yourself')
+    job = models.CharField(_('job'), max_length=50, null=True, blank=True,
+        help_text='What is your current job?')
     
         
     def __str__(self) -> str:
@@ -82,6 +38,7 @@ class AboutMeModels(CreateModel):
         
         
 class SkillModel(CreateModel):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='skill')
     skill_name = models.CharField(_('skill_name'), max_length=50)
     image = models.ImageField(_('image'), blank=True)
     
@@ -95,11 +52,13 @@ class SkillModel(CreateModel):
         
         
 class EducationModel(CreateModel):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='education')
     title_education = models.CharField(_('education name'), max_length=100)
-    text = models.TextField(_('sayTell me a little bit about it education. '), max_length=255)
+    explain_education = models.TextField(_('explain education'), max_length=500,
+        help_text='Describe where you were trained and educated')
     at_education = jmodels.jDateField(_('at time'))
     to_education = jmodels.jDateField(_('to time'), blank=True, null=True)
-    busy = models.BooleanField(default=False)
+    status_education = models.BooleanField(_('status education'), default=False)
     
     def __str__(self) -> str:
         return self.title_education
@@ -110,22 +69,18 @@ class EducationModel(CreateModel):
         db_table = 'educations'
         
         
-class ExpreiencModel(CreateModel):
-    exprense_title = models.CharField(_('exprience title'), max_length=50)
-    explain_exprence = models.TextField(_('explain to own project'), max_length=300)
+class ExpreienceWorkModel(CreateModel):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='experience')
+    exprience_title = models.CharField(_('experience title'), max_length=50,
+                                      help_text='')
+    explain_exprence = models.TextField(_('explain to own experience'), max_length=500,
+        help_text='Tell me something about your work experience.')
     link_company = models.URLField(_('link to company'), blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
     at_date_exprence = jmodels.jDateField(_('at date'), default=timezone.now)
     to_date_exprence = jmodels.jDateField(_('to date'), default=timezone.now)
     
-    class StatusProject(models.TextChoices):
-        start = 's', _('start'),
-        doing = 'd', _('doing'),
-        complate = 'c', _('complate'),
-    status_project = models.CharField(_('status'),
-                                      max_length=1,
-                                      default=StatusProject.complate,
-                                      choices=StatusProject.choices)
+    
     def __str__(self) -> str:
         return self.exprense_title
     
@@ -135,11 +90,20 @@ class ExpreiencModel(CreateModel):
         db_table = 'exprences'
         
 
-class ExprienceProject(CreateModel):
+class ProjectModel(CreateModel):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='project')
     title = models.CharField(_('title project'), max_length=50)
     project_url = models.URLField(_('project url'))
     image = models.ImageField(blank=True, null=True)
     
+    class StatusProject(models.TextChoices):
+        start = 's', _('start'),
+        doing = 'd', _('doing'),
+        complate = 'c', _('complate'),
+    status_project = models.CharField(_('status'),
+                                      max_length=1,
+                                      default=StatusProject.complate,
+                                      choices=StatusProject.choices)
     def __str__(self) -> str:
         return self.title
     

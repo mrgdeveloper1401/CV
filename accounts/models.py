@@ -7,9 +7,21 @@ from django.utils import timezone
 from .manager import UsersManager
 
 
+class MobilePreCode(models.Model):
+    precode = models.CharField(_('precode'), max_length=5)
+    
+    def __str__(self) -> str:
+        return self.precode
+    
+    class Meta:
+        verbose_name = _('mobile precode')
+        verbose_name_plural = _('mobile precodes')
+        db_table = 'precode'
+
 class User(AbstractBaseUser, PermissionsMixin, CreateModel):
     full_name = models.CharField(_('Full name'), max_length=100)
     email = models.EmailField(_('Email'), max_length=100, unique=True)
+    precde = models.ForeignKey(MobilePreCode, on_delete=models.PROTECT, related_name='codes', blank=True, null=True)
     mobile_phone = models.CharField(_('Mobile phone'), max_length=11, unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)

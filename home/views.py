@@ -1,9 +1,7 @@
 from django.shortcuts import render
-# from .models import NvbarModel, HeaderConetent, HeaderConetentSciol, AboutMeModels, SkillModel, ExpreiencModel, ExprienceProjec
 from django.views import View
 from django.contrib import messages
-from .models import HeaderConetent, HeaderConetentSciol, AboutMeModels, SkillModel, EducationModel
-from .models import ExpreiencModel, ExprienceProject
+from .models import SciolModel, AboutMeModels, SkillModel, EducationModel, ExpreienceWorkModel, ProjectModel
 from .form import ContactUsForm
 
 
@@ -20,17 +18,17 @@ class HomeView(View):
     
     def get(self, request):
         # navbar = NvbarModel.objects.published()
-        header_content = HeaderConetent.objects.all()
-        sciol = HeaderConetentSciol.objects.all()
+        # header_content = HeaderConetent.objects.all()
+        sciol = SciolModel.objects.all()
         about = AboutMeModels.objects.all()
         skill = SkillModel.objects.all()
         education = EducationModel.objects.all()
-        project = ExprienceProject.objects.all()
-        exprience = ExpreiencModel.objects.all()
+        project = ProjectModel.objects.all()
+        exprience = ExpreienceWorkModel.objects.all()
         form = self.form_class()
         context = {
             # 'navbar': navbar,
-            'hcontent': header_content,
+            # 'hcontent': header_content,
             'sciol':sciol,
             'about': about,
             'skills': skill,

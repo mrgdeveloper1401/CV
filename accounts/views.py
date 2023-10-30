@@ -60,7 +60,6 @@ class UserLogoutView(View):
         
         
 class UserProfileView(View):
-    
     def dispatch(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=kwargs['user_id'])
         if request.user.id != user.id:
