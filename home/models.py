@@ -6,7 +6,7 @@ from django_jalali.db import models as jmodels
 from accounts.models import User
 
 
-
+# navbar
 class NvbarModel(CreateModel):
     navbar_name = models.CharField(_('Name'), max_length=20)
 
@@ -23,8 +23,7 @@ class NvbarModel(CreateModel):
         verbose_name_plural = _('navbars')
         db_table = 'navbar'
         # ordering = ('-navbar_name',)
-        
-        
+    
 class HeaderConetent(CreateModel):
     text = models.CharField(_('tell me about you'), max_length=50)
     image = models.ImageField(blank=True)
@@ -49,15 +48,27 @@ class HeaderConetentSciol(CreateModel):
         verbose_name_plural = _('header conetents sciol')
         db_table = 'sciol'
         
-        
+class MobileCode(models.Model):
+    mobile_code = models.CharField(_('mobile code'), max_length=5)
+    
+    def __str__(self) -> str:
+        return self.mobile_code
+    
+    class Meta:
+        db_tablespace = 'mobile_code'
+        verbose_name = _('mobile code')
+        verbose_name_plural = _('mobile code')       
+
 class AboutMeModels(CreateModel):
     image = models.ImageField(blank=True)
     full_name = models.CharField(_('full_name'), max_length=50)
     explain = models.TextField(_('explain'), max_length=255)
     email = models.EmailField(null=True, blank=True)
     mobile_phone = models.CharField(_('mobile phone'), max_length=11, unique=True, null=True, blank=True)
+    mobile_code = models.ForeignKey(MobileCode, on_delete=models.PROTECT, verbose_name='code')
     job = models.CharField(_('job'), max_length=50, null=True, blank=True)
     
+        
     def __str__(self) -> str:
         return self.full_name
     
@@ -89,7 +100,7 @@ class EducationModel(CreateModel):
     
     def __str__(self) -> str:
         return self.title_education
-    
+            
     class Meta:
         verbose_name = _('education')
         verbose_name_plural = _('educations')
@@ -119,6 +130,20 @@ class ExpreiencModel(CreateModel):
         verbose_name = _('exprence')
         verbose_name_plural = _('exprences')
         db_table = 'exprences'
+        
+
+class ExprienceProject(CreateModel):
+    title = models.CharField(_('title project'), max_length=50)
+    project_url = models.URLField(_('project url'))
+    image = models.ImageField(blank=True, null=True)
+    
+    def __str__(self) -> str:
+        return self.title
+    
+    class Meta:
+        verbose_name = _('project')
+        verbose_name_plural = _('projects')
+        db_table = 'projects'
             
 class ContactUsModel(CreateModel):
     full_name = models.CharField(_('full_name'), max_length=100)
@@ -133,18 +158,3 @@ class ContactUsModel(CreateModel):
         verbose_name = _('content us')
         verbose_name_plural = _('contents us')
         db_table = 'contents'
-        
-
-class ContentInfoModel(models.Model):
-    full_name = models.CharField(_('full_name'), max_length=100, null=True, blank=True)
-    mobile_phone = models.CharField(_('mobile_phone'), max_length=11, blank=True, unique=True, null=True)
-    email = models.CharField(_('email'), max_length=100, unique=True, blank=True, null=True)
-    explane_me = models.TextField(null=True, blank=True)
-    
-    def __str__(self) -> str:
-        return self.full_name
-    
-    class Meta:
-        verbose_name = _('contact info')
-        verbose_name_plural = _('contacts info')
-        db_table = 'contact_info'

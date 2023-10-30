@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import NvbarModel, HeaderConetent, HeaderConetentSciol, AboutMeModels, SkillModel, EducationModel, ExpreiencModel, ContactUsModel, ContentInfoModel
+from .models import NvbarModel, HeaderConetent, HeaderConetentSciol, AboutMeModels, SkillModel
+from .models import EducationModel, ExpreiencModel, ContactUsModel, MobileCode, ExprienceProject
 import django_jalali.admin as jadmin
 from django_jalali.admin.filters import JDateFieldListFilter
 
@@ -12,8 +13,9 @@ class NvbarModelAdmin(admin.ModelAdmin):
     list_filter = (
         ('created_at', JDateFieldListFilter),
     )
+    search_fields = ('navbar_name',)
     
-
+    
 @admin.register(HeaderConetent)
 class HeaderConetentAdmin(admin.ModelAdmin):
     list_display = ('text', 'id')
@@ -27,6 +29,10 @@ class HeaderConetentScio(admin.ModelAdmin):
     search_fields = ('sciol_name', 'sciol_url', )
     list_filter = (('created_at', JDateFieldListFilter),)
 
+
+@admin.register(MobileCode)
+class MobileCodeAdmin(admin.ModelAdmin):
+    list_display = ('mobile_code', 'id')
 
 @admin.register(AboutMeModels)
 class AboutMeModelsAdmin(admin.ModelAdmin):
@@ -55,11 +61,12 @@ class ExpreiencModelAdmin(admin.ModelAdmin):
     search_fields = ('exprense_title', 'created_at')
     
     
+@admin.register(ExprienceProject)
+class ExprienceAdmin(admin.ModelAdmin):
+    list_display = ('title', 'project_url', 'created_at', 'id')
+    search_fields = ('title', )
+    list_filter = ('created_at',)
+    
 @admin.register(ContactUsModel)
 class ContactUsModelAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'email', 'mobile_phone', 'id')
-    
-    
-# @admin.register(ContentInfoModel)
-# class ContentInfoModelAdmin(admin.ModelAdmin):
-#     list_display = ('full_name', 'email', 'mobile_phone', 'id')
