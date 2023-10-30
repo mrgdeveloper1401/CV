@@ -4,6 +4,7 @@ from django.utils import timezone
 from core.models import CreateModel
 from django_jalali.db import models as jmodels
 from accounts.models import User
+from .manager import NavPublished
 
 
 # navbar
@@ -15,6 +16,8 @@ class NvbarModel(CreateModel):
         reject = 'rj', _('Reject'),
     navbar_status = models.CharField(_('Status'), max_length=2, choices=NavbarChoose.choices,
                                      default=NavbarChoose.publish)
+    objects = NavPublished()
+    
     def __str__(self) -> str:
         return self.navbar_name
     
@@ -110,7 +113,7 @@ class EducationModel(CreateModel):
 class ExpreiencModel(CreateModel):
     exprense_title = models.CharField(_('exprience title'), max_length=50)
     explain_exprence = models.TextField(_('explain to own project'), max_length=300)
-    link_project = models.URLField(_('link to project'), blank=True, null=True)
+    link_company = models.URLField(_('link to company'), blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
     at_date_exprence = jmodels.jDateField(_('at date'), default=timezone.now)
     to_date_exprence = jmodels.jDateField(_('to date'), default=timezone.now)
