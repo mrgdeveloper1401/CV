@@ -30,7 +30,7 @@ class AboutMeModels(CreateModel):
     
         
     def __str__(self) -> str:
-        return self.full_name
+        return self.user.email
     
     class Meta:
         verbose_name = _('about me')
@@ -83,7 +83,7 @@ class ExpreienceWorkModel(CreateModel):
     
     
     def __str__(self) -> str:
-        return self.exprense_title
+        return self.user.email
     
     class Meta:
         verbose_name = _('exprence')

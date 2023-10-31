@@ -1,45 +1,29 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
-from .models import SciolModel, AboutMeModels, SkillModel, EducationModel, ExpreienceWorkModel, ProjectModel
+from .models import SciolModel, AboutMeModels, SkillModel, EducationModel, ExpreienceWorkModel, ProjectModel, ContactUsModel
 from .form import ContactUsForm, AboutMeForm, SciolForm, SkillForm, EducationForm, ExprienceWorkForm, ProjectForm
 
 
 class HomeView(View):
     templated_name = 'home/home.html'
-    form_class = ContactUsForm
-    
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated == request.user:
-            messages.error(request, 'You are not authorized to', 'danger')
-        return super().dispatch(request, *args, **kwargs)
-
-    
-    
-    def get(self, request):
-        # navbar = NvbarModel.objects.published()
-        # header_content = HeaderConetent.objects.all()
-        sciol = SciolModel.objects.all()
-        about = AboutMeModels.objects.all()
-        skill = SkillModel.objects.all()
-        education = EducationModel.objects.all()
-        project = ProjectModel.objects.all()
-        exprience = ExpreienceWorkModel.objects.all()
-        form = self.form_class()
+    def get(self, request, *args, **kwargs):
+        # sciol = get_object_or_404(SciolModel, pk=kwargs['user_id'])
+        # about = get_object_or_404(AboutMeModels, pk=kwargs['user_id'])
+        # skill = get_object_or_404(SkillModel, pk=kwargs['user_id'])
+        # education = get_object_or_404(EducationModel, pk=kwargs['user_id'])
+        # project = get_object_or_404(ProjectModel, pk=kwargs['user_id'])
+        # exprience = get_object_or_404(ExpreienceWorkModel, pk=kwargs['user_id'])
         context = {
-            # 'navbar': navbar,
-            # 'hcontent': header_content,
-            'sciol':sciol,
-            'about': about,
-            'skills': skill,
-            'education': education,
-            'projects': project,
-            'expriece': exprience,
-            'form': form
-            
+            # 'sciol':sciol,
+            # 'about': about,
+            # 'skills': skill,
+            # 'education': education,
+            # 'projects': project,
+            # 'expriece': exprience,
         }
         return render(request, self.templated_name, context)
-    
+
     
 class AboutMeView(View):
     templated_name = 'home/about_me.html'
@@ -170,3 +154,24 @@ class ProjectView(View):
             return redirect('home:home')
         return render(request, self.templated_name, {'form': form})
         
+        
+class ContactUsView(View):
+    templated_name = 'home/contact_us.html'
+    form_class = ContactUsForm
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.templated_name, {'form': form})
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            ContactUsModel.objects.create(
+                full_name = cd['full_name'],
+                email = cd['email'],
+                mobile_phone = cd['mobile_phone'],
+                body = cd['body']
+            )
+            messages.success(request, 'tnx for send feedback', 'success')
+            return redirect('home:home')
+        return render(request, self.templated_name, {'form': form})
