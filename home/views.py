@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from .models import SciolModel, AboutMeModels, SkillModel, EducationModel, ExpreienceWorkModel, ProjectModel
@@ -49,7 +49,17 @@ class AboutMeView(View):
         return render(request, self.templated_name, {'form': form})
     
     def post(self, request, *args, **kwargs):
-        pass
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            cd = form.cleaned_data
+            AboutMeModels.objects.create(
+                user = request.user,
+                image = cd['image'],
+                explain = cd['explain'],
+                job = cd['job'],
+            )
+            return redirect('home:sciol', request.user.id )
+        return render(request, self.templated_name, {"form": form})
     
 
 class SciolView(View):
@@ -60,7 +70,16 @@ class SciolView(View):
         return render(request, self.templated_name, {'form': form})
     
     def post(self, request, *args, **kwargs):
-        pass
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            SciolModel.objects.create(
+                user = request.user,
+                sciol_name = cd['sciol_name'],
+                sciol_url = cd['sciol_url'],
+            )
+            return redirect('home:skill', request.user.id)
+        return render(request, self.templated_name, {'form': form})
     
     
 class SkillView(View):
@@ -71,7 +90,15 @@ class SkillView(View):
         return render(request, self.templated_name, {'form': form})
     
     def post(self, request, *args, **kwargs):
-        pass
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            SkillModel.objects.create(
+                user = request.user,
+                skill_name = cd['skill_name'],
+            )
+            return redirect('home:education', request.user.id)
+        return render(request, self.templated_name, {'form': form})
     
 
 class EducationView(View):
@@ -82,7 +109,19 @@ class EducationView(View):
         return render(request, self.templated_name, {'form': form})
     
     def post(self, request, *args, **kwargs):
-        pass
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            EducationModel.objects.create(
+                user = request.user,
+                title_education = cd['title_education'],
+                explain_education = cd['explain_education'],
+                at_education = cd['at_education'],
+                to_education = cd['to_education'],
+                status_education =cd['status_education']   
+            )
+            return redirect('home:exprience', request.user.id)
+        return render(request, self.templated_name, {'form': form})
     
     
 class ExprienceWorkView(View):
@@ -93,7 +132,20 @@ class ExprienceWorkView(View):
         return render(request, self.templated_name, {'form': form})
     
     def post(self, request, *args, **kwargs):
-        pass
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            cd = form.cleaned_data
+            ExpreienceWorkModel.objects.create(
+                user = request.user,
+                exprience_title = cd['exprience_title'],
+                explain_exprence = cd['explain_exprence'],
+                link_company = cd['link_company'],
+                image = cd['image'],
+                at_date_exprence = cd['at_date_exprence'],
+                to_date_exprence = cd['to_date_exprence'],
+            )
+            return redirect('home:project', request.user.id)
+        return render(request, self.templated_name, {'form': form})
     
 
 class ProjectView(View):
@@ -104,4 +156,17 @@ class ProjectView(View):
         return render(request, self.templated_name, {'form': form})
     
     def post(self, request, *args, **kwargs):
-        pass
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            cd = form.cleaned_data
+            ProjectModel.objects.create(
+                user = request.user,
+                title = cd['title'],
+                project_url = cd['project_url'],
+                image = cd['image'],
+                status_project = cd['status_project']
+            )
+            messages.success(request, 'resemeh created successfully', 'success')
+            return redirect('home:home')
+        return render(request, self.templated_name, {'form': form})
+        

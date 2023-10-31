@@ -15,8 +15,8 @@ class SciolModel(CreateModel):
         return self.sciol_name
     
     class Meta:
-        verbose_name = _('header_conetent sciol')
-        verbose_name_plural = _('header conetents sciol')
+        verbose_name = _('sciol')
+        verbose_name_plural = _('sciols')
         db_table = 'sciol'
         
         
