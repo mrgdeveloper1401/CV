@@ -117,8 +117,8 @@ class ProjectModel(CreateModel):
             
 class ContactUsModel(CreateModel):
     full_name = models.CharField(_('full_name'), max_length=100)
-    email = models.CharField(_('email'), max_length=100, unique=True)
-    mobile_phone = models.CharField(_('mobile_phone'), max_length=11, unique=True, blank=True)
+    email = models.CharField(_('email'), max_length=100)
+    mobile_phone = models.CharField(_('mobile_phone'), max_length=11, blank=True)
     body = models.TextField()
     
     def __str__(self) -> str:

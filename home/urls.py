@@ -10,6 +10,5 @@ urlpatterns = [
     path('education/<int:user_id>', views.EducationView.as_view(), name='education'),
     path('exprience/<int:user_id>', views.ExprienceWorkView.as_view(), name='exprience'),
     path('project/<int:user_id>', views.ProjectView.as_view(), name='project'),
-    path('contact_us/', views.ContactUsView.as_view(), name='contact_us'),
     
 ]

@@ -7,6 +7,7 @@ from .form import ContactUsForm, AboutMeForm, SciolForm, SkillForm, EducationFor
 
 class HomeView(View):
     templated_name = 'home/home.html'
+    
     def get(self, request, *args, **kwargs):
         # sciol = get_object_or_404(SciolModel, pk=kwargs['user_id'])
         # about = get_object_or_404(AboutMeModels, pk=kwargs['user_id'])
@@ -14,6 +15,7 @@ class HomeView(View):
         # education = get_object_or_404(EducationModel, pk=kwargs['user_id'])
         # project = get_object_or_404(ProjectModel, pk=kwargs['user_id'])
         # exprience = get_object_or_404(ExpreienceWorkModel, pk=kwargs['user_id'])
+        form = ContactUsForm()
         context = {
             # 'sciol':sciol,
             # 'about': about,
@@ -21,8 +23,23 @@ class HomeView(View):
             # 'education': education,
             # 'projects': project,
             # 'expriece': exprience,
+            'form': form
         }
         return render(request, self.templated_name, context)
+    
+    def post(self, request):
+        form = ContactUsForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            ContactUsModel.objects.create(
+                full_name = cd['full_name'],
+                email = cd['email'],
+                mobile_phone = cd['mobile_phone'],
+                body = cd['body']
+            )
+            messages.success(request, 'tnx for send feedback', 'success')
+            return redirect('home:home')
+        return render(request, self.templated_name, {'form': form})
 
     
 class AboutMeView(View):
@@ -153,25 +170,4 @@ class ProjectView(View):
             messages.success(request, 'resemeh created successfully', 'success')
             return redirect('home:home')
         return render(request, self.templated_name, {'form': form})
-        
-        
-class ContactUsView(View):
-    templated_name = 'home/contact_us.html'
-    form_class = ContactUsForm
-    def get(self, request):
-        form = self.form_class()
-        return render(request, self.templated_name, {'form': form})
-    
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            ContactUsModel.objects.create(
-                full_name = cd['full_name'],
-                email = cd['email'],
-                mobile_phone = cd['mobile_phone'],
-                body = cd['body']
-            )
-            messages.success(request, 'tnx for send feedback', 'success')
-            return redirect('home:home')
-        return render(request, self.templated_name, {'form': form})
+
