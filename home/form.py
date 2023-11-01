@@ -42,3 +42,4 @@ class ProjectForm(forms.ModelForm):
     class Meta:
         model = ProjectModel
         exclude = ('user', 'created_at')
+        
