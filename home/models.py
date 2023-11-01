@@ -1,15 +1,15 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
 from core.models import CreateModel
 from django_jalali.db import models as jmodels
 from accounts.models import User
+from jdatetime import date
 
 
 class SciolModel(CreateModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='sciol')
-    sciol_name = models.CharField(_('sciol name'), max_length=20)
-    sciol_url = models.CharField(_('sciol url'), max_length=255)
+    sciol_name = models.CharField(_('sciol name'), max_length=20, blank=True)
+    sciol_url = models.CharField(_('sciol url'), max_length=255, blank=True)
      
     def __str__(self) -> str:
         return self.sciol_name
@@ -24,7 +24,7 @@ class AboutMeModels(CreateModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='about')
     image = models.ImageField(blank=True, help_text='Post a picture of yourself')
     explain = models.TextField(_('explain'), max_length=500,
-        help_text='Write something about yourself')
+        help_text='Write something about yourself', blank=True)
     job = models.CharField(_('job'), max_length=50, null=True, blank=True,
         help_text='What is your current job?')
     class MeritalStatus(models.TextChoices):
@@ -32,7 +32,8 @@ class AboutMeModels(CreateModel):
         married = 'm', _('married'),
     marital_status = models.CharField(_('marital status'), max_length=1,
                                       choices=MeritalStatus.choices,
-                                      default=MeritalStatus.single)
+                                      default=MeritalStatus.single,
+                                      blank=True)
     
     class Gender(models.TextChoices):
         male = 'm', _('male'),
@@ -40,9 +41,17 @@ class AboutMeModels(CreateModel):
         
     gender_choose = models.CharField(_('gender'), max_length=1,
                                      default=Gender.male,
-                                     choices=Gender.choices)
-    address = models.TextField()
-    birth_day = jmodels.jDateField(_('birth day'), default=timezone.now())
+                                     choices=Gender.choices,
+                                     blank=True)
+    address = models.TextField(blank=True, max_length=500)
+    birth_day = jmodels.jDateField(_('birth day'), blank=True)
+    
+    @property
+    def age(self):
+        today = date.today()
+        age = today.year - self.birth_day.year - ((today.month, today.day) < (self.birth_day.month, self.birth_day.day))
+        return age
+    
     def __str__(self) -> str:
         return self.user.email
     
@@ -54,7 +63,7 @@ class AboutMeModels(CreateModel):
         
 class SkillModel(CreateModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='skill')
-    skill_name = models.CharField(_('skill_name'), max_length=50)
+    skill_name = models.CharField(_('skill_name'), max_length=50, blank=True)
 
     
     def __str__(self) -> str:
@@ -68,17 +77,17 @@ class SkillModel(CreateModel):
         
 class EducationModel(CreateModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='education')
-    fields_of_study = models.CharField(_('field of study'), max_length=100)
-    university = models.CharField(_('university'), max_length=100)
-    score = models.DecimalField(_('score'), max_digits=2, decimal_places=2)
+    fields_of_study = models.CharField(_('field of study'), max_length=100, blank=True)
+    university = models.CharField(_('university'), max_length=100, blank=True)
+    score = models.DecimalField(_('score'), max_digits=4, decimal_places=2, blank=True)
     explain_education = models.TextField(_('explain education'), max_length=500,
-        help_text='Describe where you were trained and educated')
-    at_education = jmodels.jDateField(_('at time'))
+        help_text='Describe where you were trained and educated', blank=True)
+    at_education = jmodels.jDateField(_('at time'), blank=True)
     to_education = jmodels.jDateField(_('to time'), blank=True, null=True)
-    status_education = models.BooleanField(_('studying'), default=False)
+    status_education = models.BooleanField(_('studying'), default=False, blank=True)
     
     def __str__(self) -> str:
-        return self.title_education
+        return self.user.email
             
     class Meta:
         verbose_name = _('education')
@@ -88,14 +97,21 @@ class EducationModel(CreateModel):
         
 class ExpreienceWorkModel(CreateModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='experience')
-    job_title = models.CharField(_('job title'), max_length=50)
-    organization_name = models.CharField(_('organization name'), max_length=50)
+    job_title = models.CharField(_('job title'), max_length=50, blank=True)
+    organization_name = models.CharField(_('organization name'), max_length=50, blank=True)
     explain_your_duties = models.TextField(_('explain your duties'), max_length=500,
-        help_text='Tell me something about your work experience.')
+        help_text='Tell me something about your work experience.', blank=True)
     link_company = models.URLField(_('link to company'), blank=True, null=True)
-    at_date_exprence = jmodels.jDateField(_('at date'), default=timezone.now)
-    to_date_exprence = jmodels.jDateField(_('to date'), default=timezone.now)
-    status_work = models.BooleanField(_('status work'), default=False)
+    at_date_exprence = jmodels.jDateField(_('at date'), blank=True)
+    to_date_exprence = jmodels.jDateField(_('to date'), blank=True)
+    
+    class StatusWorkOraginaztion(models.TextChoices):
+        busy = "b", _("I am busy now"),
+        done = 'd', _("I dont work here")
+        found = 'f', _('looking for work')
+    status_work = models.CharField(_('status work'), max_length=1,
+                                   default=StatusWorkOraginaztion.done,
+                                   choices=StatusWorkOraginaztion.choices)    
     
     
     def __str__(self) -> str:
@@ -109,11 +125,11 @@ class ExpreienceWorkModel(CreateModel):
 
 class ProjectModel(CreateModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='project')
-    title = models.CharField(_('title project'), max_length=50)
-    project_url = models.URLField(_('project url'))
+    title = models.CharField(_('title project'), max_length=50, blank=True)
+    project_url = models.URLField(_('project url'), blank=True)
     image = models.ImageField(blank=True, null=True)
-    from_date = jmodels.jDateField(_('from date'), default=timezone.now())
-    up_to_date = jmodels.jDateField(_('up to date'), default=timezone.now())
+    from_date = jmodels.jDateField(_('from date'), blank=True)
+    up_to_date = jmodels.jDateField(_('up to date'), blank=True)
     
     
     class StatusProject(models.TextChoices):
@@ -136,7 +152,7 @@ class ProjectModel(CreateModel):
 class AwardsModel(CreateModel):
     awards_name = models.CharField(_('awards_name'), max_length=50)
     explain_awards = models.TextField(_('explain awards'), max_length=500)
-    year_awards = jmodels.jDateField(_('year'), default=timezone.now())
+    year_awards = jmodels.jDateField(_('year'))
     
     class Meta:
         verbose_name = _('awards')
@@ -147,7 +163,7 @@ class AwardsModel(CreateModel):
 class BoookArticleModel(CreateModel):
     title = models.CharField(_('title'), max_length=50)
     publisher = models.ManyToManyField('self')
-    year = jmodels.jDateField(_('year'), blank=True, default=timezone.now())
+    year = jmodels.jDateField(_('year'), blank=True)
     
     class Meta:
         verbose_name = _('book artiles')

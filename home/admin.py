@@ -6,7 +6,7 @@ from django_jalali.admin.filters import JDateFieldListFilter
     
     
 @admin.register(SciolModel)
-class HeaderConetentScio(admin.ModelAdmin):
+class SciolAdmin(admin.ModelAdmin):
     list_display = ('user', 'sciol_name', 'sciol_url', 'id')
     search_fields = ('sciol_name', 'sciol_url', )
     list_filter = (('created_at', JDateFieldListFilter),)
@@ -14,9 +14,9 @@ class HeaderConetentScio(admin.ModelAdmin):
 
 @admin.register(AboutMeModels)
 class AboutMeModelsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'explain', 'id')
-    search_fields = ('explain', )
-    list_filter = (('created_at', JDateFieldListFilter),)
+    list_display = ('user', 'job', 'marital_status', 'gender_choose', 'birth_day', 'age', 'id')
+    search_fields = ('user', )
+    list_filter = (('created_at', JDateFieldListFilter), 'marital_status' ,'gender_choose', )
     
 
 
@@ -33,16 +33,15 @@ class EducationModelAdmin(admin.ModelAdmin):
     
     
 @admin.register(ExpreienceWorkModel)
-class ExpreiencModelAdmin(admin.ModelAdmin):
+class ExpreienceWorkAdmin(admin.ModelAdmin):
     list_display = ('user', 'job_title', 'at_date_exprence', 'to_date_exprence', 'status_work', 'id')
     
     
 @admin.register(ProjectModel)
-class ExprienceAdmin(admin.ModelAdmin):
-    list_display = ('title', 'project_url', 'created_at', 'status_project', 'id')
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('title', 'from_date', 'up_to_date', 'status_project', 'id')
     search_fields = ('title', )
     list_filter = ('created_at',)
-    list_editable = ('status_project', )
     
 
 class AwardsAdmin(admin.ModelAdmin):
@@ -53,3 +52,8 @@ class AwardsAdmin(admin.ModelAdmin):
 class ContactUsModelAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'email', 'mobile_phone', 'id')
     list_filter = ('created_at', )
+    
+
+class AwardsModelAdmin(admin.ModelAdmin):
+    list_display = ('awards_name', 'year_awards', 'id')
+    list_filter = ('created_at',)
