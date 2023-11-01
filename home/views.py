@@ -58,6 +58,10 @@ class AboutMeView(View):
                 image = cd['image'],
                 explain = cd['explain'],
                 job = cd['job'],
+                marital_status = cd['marital_status'],
+                gender_choose = cd['gender_choose'],
+                address = cd['address'],
+                birth_day = cd['birth_day'],
             )
             return redirect('home:sciol', request.user.id )
         return render(request, self.templated_name, {"form": form})
@@ -115,11 +119,15 @@ class EducationView(View):
             cd = form.cleaned_data
             EducationModel.objects.create(
                 user = request.user,
-                title_education = cd['title_education'],
+                fields_of_study = cd['fields_of_study'],
                 explain_education = cd['explain_education'],
                 at_education = cd['at_education'],
                 to_education = cd['to_education'],
-                status_education =cd['status_education']   
+                status_education =cd['status_education'],
+                university = cd['university'],
+                score = cd['score'],
+                status_education = cd['status_education'],
+                
             )
             return redirect('home:exprience', request.user.id)
         return render(request, self.templated_name, {'form': form})
@@ -138,12 +146,15 @@ class ExprienceWorkView(View):
             cd = form.cleaned_data
             ExpreienceWorkModel.objects.create(
                 user = request.user,
-                exprience_title = cd['exprience_title'],
-                explain_exprence = cd['explain_exprence'],
+                job_title = cd['job_title'],
+                explain_your_duties = cd['explain_your_duties'],
                 link_company = cd['link_company'],
                 image = cd['image'],
                 at_date_exprence = cd['at_date_exprence'],
                 to_date_exprence = cd['to_date_exprence'],
+                organization_name = cd['organization_name'],
+                
+                
             )
             return redirect('home:project', request.user.id)
         return render(request, self.templated_name, {'form': form})
@@ -165,7 +176,9 @@ class ProjectView(View):
                 title = cd['title'],
                 project_url = cd['project_url'],
                 image = cd['image'],
-                status_project = cd['status_project']
+                status_project = cd['status_project'],
+                from_date = cd['from_date'],
+                up_to_date = cd['up_to_date'],
             )
             messages.success(request, 'resemeh created successfully', 'success')
             return redirect('home:home')
