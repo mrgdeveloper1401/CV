@@ -126,8 +126,6 @@ class EducationView(View):
                 status_education =cd['status_education'],
                 university = cd['university'],
                 score = cd['score'],
-                status_education = cd['status_education'],
-                
             )
             return redirect('home:exprience', request.user.id)
         return render(request, self.templated_name, {'form': form})

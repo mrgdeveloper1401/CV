@@ -150,9 +150,9 @@ class ProjectModel(CreateModel):
             
             
 class AwardsModel(CreateModel):
-    awards_name = models.CharField(_('awards_name'), max_length=50)
-    explain_awards = models.TextField(_('explain awards'), max_length=500)
-    year_awards = jmodels.jDateField(_('year'))
+    awards_name = models.CharField(_('awards_name'), max_length=50, blank=True)
+    explain_awards = models.TextField(_('explain awards'), max_length=500, blank=True)
+    year_awards = jmodels.jDateField(_('year'), blank=True)
     
     class Meta:
         verbose_name = _('awards')
@@ -160,11 +160,23 @@ class AwardsModel(CreateModel):
         db_table = 'awards'
         
         
-class BoookArticleModel(CreateModel):
-    title = models.CharField(_('title'), max_length=50)
-    publisher = models.ManyToManyField('self')
-    year = jmodels.jDateField(_('year'), blank=True)
+class AuthoreModel(CreateModel):
+    auther = models.CharField(_('auther'), max_length=100, blank=True)
     
+    def __str__(self) -> str:
+        return self.auther
+    class Meta:
+        verbose_name = _('authore')
+        verbose_name_plural = _('authore')
+        db_table = 'authore'
+        
+class BoookArticleModel(CreateModel):
+    title = models.CharField(_('title'), max_length=50, blank=True)
+    publisher = models.ManyToManyField(AuthoreModel, related_name='authors')
+    year = jmodels.jDateField(_('year'), blank=True)
+
+    def __str__(self) -> str:
+        return self.title    
     class Meta:
         verbose_name = _('book artiles')
         verbose_name_plural = _('book artiles')
