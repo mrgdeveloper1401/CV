@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User
+from .models import User, RecycleUser
 from .forms import UserChangeForm, UserCreationForm
 from django_jalali.admin.filters import JDateFieldListFilter
 
@@ -38,3 +38,7 @@ class UserAdmin(BaseUserAdmin):
     )
     
     
+
+@admin.register(RecycleUser)
+class RecycleUserAdmin(admin.ModelAdmin):
+    pass

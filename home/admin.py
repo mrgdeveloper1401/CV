@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SciolModel, AboutMeModels, SkillModel
+from .models import SciolModel, AboutMeModels, SkillModel, AwardsModel
 from .models import EducationModel, ExpreienceWorkModel, ContactUsModel, ProjectModel
 from django_jalali.admin.filters import JDateFieldListFilter
 
@@ -28,13 +28,13 @@ class SkillModelAdmin(admin.ModelAdmin):
 
 @admin.register(EducationModel)
 class EducationModelAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title_education', 'at_education', 'to_education', 'status_education', 'id')
+    list_display = ('user', 'fields_of_study', 'at_education', 'to_education', 'status_education', 'id')
     list_filter = (('created_at', JDateFieldListFilter),)
     
     
 @admin.register(ExpreienceWorkModel)
 class ExpreiencModelAdmin(admin.ModelAdmin):
-    list_display = ('user', 'exprience_title', 'at_date_exprence', 'to_date_exprence', 'id')
+    list_display = ('user', 'job_title', 'at_date_exprence', 'to_date_exprence', 'status_work', 'id')
     
     
 @admin.register(ProjectModel)
@@ -43,6 +43,11 @@ class ExprienceAdmin(admin.ModelAdmin):
     search_fields = ('title', )
     list_filter = ('created_at',)
     list_editable = ('status_project', )
+    
+
+class AwardsAdmin(admin.ModelAdmin):
+    list_display = ('awards_name', 'year_awards', 'id')
+    list_filter = ('year_awards',)
     
 @admin.register(ContactUsModel)
 class ContactUsModelAdmin(admin.ModelAdmin):

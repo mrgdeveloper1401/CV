@@ -45,3 +45,9 @@ class User(AbstractBaseUser, PermissionsMixin, CreateModel):
     @property
     def is_admin(self):
         return self.is_staff
+    
+
+
+class RecycleUser(User):
+    class Meta:
+        proxy = True

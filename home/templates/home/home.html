@@ -5,12 +5,18 @@
 {% endblock  %}
 
 {% block content %}
-    <h1 class='text-center'>ooooooooooooops you dont resemeh </h1>
-    <a href='{% url "home:about_me" user.id %}'>please click here</a>
+
+
+
 
     <header></header>
 
-    <body></body>
+    <body>
+        {% if request.user.is_authenticated %}
+            <h1 class='text-center'>ooooooooooooops you dont resemeh </h1>
+            <a href='{% url "home:about_me" user.id %}'>please click here</a>
+        {% endif %}
+    </body>
     
     <footer>
         {% include "home/contact_us.html" %}
